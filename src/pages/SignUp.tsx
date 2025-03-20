@@ -1,21 +1,28 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Lock, UserPlus } from "lucide-react";
+import { User, Mail, Lock, UserPlus, Phone } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/contexts/AuthContext";
+import { Separator } from "@/components/ui/separator";
+
+const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  password: z.string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .regex(passwordStrengthRegex, { 
+      message: "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character" 
+    }),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -24,8 +31,7 @@ const formSchema = z.object({
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const { signup, loginWithGoogle } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -40,24 +46,20 @@ const SignUp = () => {
   const onSubmit = async (values) => {
     setIsLoading(true);
     try {
-      // Simulating registration for now
-      console.log("Sign up values:", values);
-      
-      // Show success toast
-      toast({
-        title: "Account created!",
-        description: "Welcome to Sign Scribe. You can now sign in.",
-      });
-      
-      // Redirect to sign in
-      navigate("/sign-in");
+      await signup(values.email, values.password, values.name);
     } catch (error) {
       console.error("Sign up error:", error);
-      toast({
-        variant: "destructive",
-        title: "Registration failed",
-        description: "Please check your information and try again.",
-      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await loginWithGoogle();
+    } catch (error) {
+      console.error("Google sign in error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -138,6 +140,13 @@ const SignUp = () => {
                         </div>
                       </FormControl>
                       <FormMessage />
+                      <ul className="text-xs text-muted-foreground mt-2 space-y-1 pl-3">
+                        <li className={field.value?.length >= 8 ? "text-green-500" : ""}>At least 8 characters</li>
+                        <li className={/[A-Z]/.test(field.value) ? "text-green-500" : ""}>One uppercase letter</li>
+                        <li className={/[a-z]/.test(field.value) ? "text-green-500" : ""}>One lowercase letter</li>
+                        <li className={/\d/.test(field.value) ? "text-green-500" : ""}>One number</li>
+                        <li className={/[@$!%*?&]/.test(field.value) ? "text-green-500" : ""}>One special character (@$!%*?&)</li>
+                      </ul>
                     </FormItem>
                   )}
                 />
@@ -183,6 +192,32 @@ const SignUp = () => {
                 </Button>
               </form>
             </Form>
+
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <Separator />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-muted-foreground">Or continue with</span>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={handleGoogleSignIn}
+                  disabled={isLoading}
+                >
+                  <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                    <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
+                  </svg>
+                  Continue with Google
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="mt-4 text-center">
