@@ -10,8 +10,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <img src="/src/assets/logo.svg" alt="SignaLink Logo" className="h-8 w-8" />
-              <span className="font-semibold text-lg">SignaLink</span>
+              <img src="/src/assets/logo.svg" alt="Sign Scribe Logo" className="h-8 w-8" />
+              <span className="font-semibold text-lg">Sign Scribe</span>
             </div>
             <p className="text-sm text-foreground/70">
               Breaking barriers in communication with real-time Indian Sign Language translation technology.
@@ -65,7 +65,7 @@ const Footer = () => {
         
         <div className="pt-8 mt-8 border-t border-border">
           <p className="text-center text-sm text-foreground/60">
-            © {currentYear} SignaLink. All rights reserved.
+            © {currentYear} Sign Scribe. All rights reserved.
           </p>
         </div>
       </div>
