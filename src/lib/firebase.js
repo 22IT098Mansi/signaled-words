@@ -6,13 +6,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDJmDm_FTm9RVX18Ly13LYUWe-rNifSQZ4",
-  authDomain: "sign-scribe-app.firebaseapp.com",
-  projectId: "sign-scribe-app",
-  storageBucket: "sign-scribe-app.appspot.com",
-  messagingSenderId: "854791921225",
-  appId: "1:854791921225:web:a51af15bed99b4de8a3c13",
-  measurementId: "G-LD32VCWL5E"
+  apiKey: "AIzaSyDCmnHiXuFq1ekUTpFQES35GhivYd5_8IE",
+  authDomain: "sign-scribe-13.firebaseapp.com",
+  projectId: "sign-scribe-13",
+  storageBucket: "sign-scribe-13.firebasestorage.app",
+  messagingSenderId: "1083475571895",
+  appId: "1:1083475571895:web:63d7e3aa99ce41fd8f4932"
 };
 
 // Initialize Firebase
