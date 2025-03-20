@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,8 +40,12 @@ const Header = () => {
           <a href="#features" className="text-sm font-medium hover:text-primary transition-colors">Features</a>
           <a href="#how-it-works" className="text-sm font-medium hover:text-primary transition-colors">How It Works</a>
           <a href="#community" className="text-sm font-medium hover:text-primary transition-colors">Community</a>
-          <Button variant="outline" size="sm" className="mr-2">Sign In</Button>
-          <Button variant="default" size="sm">Get Started</Button>
+          <Link to="/sign-in">
+            <Button variant="outline" size="sm" className="mr-2">Sign In</Button>
+          </Link>
+          <Link to="/sign-up">
+            <Button variant="default" size="sm">Get Started</Button>
+          </Link>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -83,8 +88,12 @@ const Header = () => {
               Community
             </a>
             <div className="pt-2 flex flex-col space-y-2">
-              <Button variant="outline" size="sm" className="w-full">Sign In</Button>
-              <Button variant="default" size="sm" className="w-full">Get Started</Button>
+              <Link to="/sign-in" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" size="sm" className="w-full">Sign In</Button>
+              </Link>
+              <Link to="/sign-up" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="default" size="sm" className="w-full">Get Started</Button>
+              </Link>
             </div>
           </nav>
         </div>
